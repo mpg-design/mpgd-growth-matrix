@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MPG Design Growth Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #5AED4A;
+    --bg: #ffffff;
+    --card-bg: #f5f5f5;
+    --dark-bg: #2c3e50;
+    --text: #000000;
+    --muted: #666666;
+    --border: #e0e0e0;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  
+  .navbar {
+    background: white;
+    padding: 20px 0;
+    border-bottom: 1px solid #CECECE;
+  }
+  
+  .navbar .wrap {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 50px;
+  }
+  
+  .hero {
+    background: radial-gradient(circle at center, #3E5B7F 0%, #1F232A 100%);
+    padding: 80px 24px;
+    text-align: center;
+    color: white;
+    border-radius: 20px;
+    margin: 24px;
+  }
+  
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  
+  h1 {
+    font-weight: 900;
+    font-size: 3.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+  
+  p.subtitle {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .pill {
+    display: inline-block;
+    background: var(--green);
+    color: #000;
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,255,0,0.3);
+  }
+  
+  .content-section {
+    padding: 30px 24px 60px;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .section-desc {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .level-card {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+  }
+  
+  .level-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .level-title-group {
+    flex: 1;
+  }
+  
+  .level-number {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  
+  .level-name {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .level-summary {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+  
+  .expand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text);
+    transition: all 0.3s;
+  }
+  
+  .level-card:hover .expand-icon {
+    background: var(--green);
+    color: #000;
+  }
+  
+  .level-card.open .expand-icon {
+    background: var(--green);
+    color: #000;
+    transform: rotate(45deg);
+  }
+  
+  .level-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  
+  .level-card.open .level-details {
+    max-height: 3000px;
+  }
+  
+  .details-content {
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  
+  .detail-section {
+    margin-bottom: 28px;
+  }
+  
+  .detail-section h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  
+  .detail-section p {
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  
+  .detail-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .detail-section li {
+    padding-left: 28px;
+    margin-bottom: 12px;
+    position: relative;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  
+  .detail-section li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+  
+  .footer {
+    background: #1a1a1a;
+    color: rgba(255,255,255,0.6);
+    padding: 40px 24px;
+    text-align: center;
+    margin-top: 60px;
+  }
+  
+  .footer-content p {
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <svg class="logo" viewBox="0 0 1779.14 423.52" xmlns="http://www.w3.org/2000/svg">
+      <rect fill="#5aed4a" width="423.52" height="423.52"/>
+      <g>
+        <circle fill="#7ac143" cx="1506.38" cy="108.5" r="18.01"/>
+        <g>
+          <polygon fill="#231f20" points="644.4 91.62 597.73 198.88 589.83 198.91 543.13 91.62 508.67 91.62 508.67 257.91 537.44 257.91 537.44 143.87 572.28 226.69 613.16 226.69 648.87 143.84 648.87 257.91 677.64 257.91 677.64 91.62 644.4 91.62"/>
+          <polygon fill="#231f20" points="1015.28 257.35 1050.59 257.35 991.16 192.78 1046.84 140.42 1012.42 140.42 967.52 183.22 961.35 183.22 961.35 91.62 933.8 91.62 933.8 257.91 961.35 257.91 961.35 204.71 968.29 204.71 1015.28 257.35"/>
+          <path fill="#231f20" d="M1160.63,196.76c0-33.55-23.49-58.23-55.94-58.23s-56.71,27.18-56.71,60.98c0,35.88,22.82,60.85,57.94,60.85,25.26,0,46.48-12.37,52.83-37.78h-25.37c-4.17,10-12.78,14.4-26.23,14.4-17.73,0-31.07-12.35-32.74-29.82h85.72c.37-3.74.49-8.32.49-10.4ZM1104.69,161.18c13.13,0,26.63,9.03,28.41,24.85h-58.54c3.29-17.66,16.31-24.85,30.13-24.85Z"/>
+          <path fill="#231f20" d="M1241.49,164.85v-23.88h-32.42v-32.45h-27.55v105.92c0,30.25,12.17,43.45,38.84,43.45h21.13v-24.76h-19.52c-9.33,0-12.9-5.83-12.9-12.5v-55.8h32.42Z"/>
+          <polygon fill="#231f20" points="1445.94 91.62 1409.43 203.53 1377.26 91.62 1348.52 91.62 1316.24 204.49 1279.27 91.62 1248.87 91.62 1303.96 257.91 1325.04 257.91 1359.5 138.53 1366.56 138.53 1398.81 257.91 1419.58 257.91 1474.67 91.62 1445.94 91.62"/>
+          <path fill="#231f20" d="M1779.14,196.76c0-33.55-23.49-58.23-55.94-58.23s-56.71,27.18-56.71,60.98c0,35.88,22.82,60.85,57.94,60.85,25.26,0,46.48-12.37,52.83-37.78h-25.37c-4.17,10-12.78,14.4-26.23,14.4-17.73,0-31.07-12.35-32.74-29.82h85.72c.37-3.74.49-8.32.49-10.4ZM1723.2,161.18c13.13,0,26.63,9.03,28.41,24.85h-58.54c3.29-17.66,16.31-24.85,30.13-24.85Z"/>
+          <path fill="#231f20" d="M1519.09,220.65v-79.67h-27.55v73.48c0,30.25,12.17,43.45,38.84,43.45h8.82v-24.76h-7.21c-9.33,0-12.9-5.83-12.9-12.5Z"/>
+          <path fill="#231f20" d="M1577.49,219.13c1.73,13.89,10.94,20.23,26.04,20.23,14.18,0,21.66-4.3,21.66-12.69,0-7.86-6.11-12.62-17-14.46l-17.33-3.15c-23.27-3.93-36.14-14.35-36.14-33.37,0-22.02,18.39-37.22,46.11-37.22,30.2,0,47.45,14.42,49.44,40.1h-24.51c-1.98-13.1-10.4-19.35-25.99-19.35-10.64,0-18.74,5.72-18.74,13.58,0,6.29,5.12,11.19,13.04,12.5l20.79,3.67c23.02,3.93,36.64,16.2,36.64,34.68,0,23.59-19.54,36.69-48.69,36.69s-49.09-13.11-51.07-41.41l25.74.18Z"/>
+          <path fill="#231f20" d="M907.37,140.42c-12.73,0-26.28,8.92-33.4,27.3h-3.95l.03-27.3h-27.55v116.93h27.55v-60.3c0-25.55,17-29.06,32.72-29.06h11.91v-27.57h-7.3Z"/>
+          <path fill="#231f20" d="M790.96,140.97l.13,20.86h-4.68c-8.26-19.01-25.4-23.31-35.32-23.31-28.61,0-53.17,20.3-53.17,60.98s24.57,60.98,53.17,60.98c9.93,0,27.06-4.31,35.32-23.31h4.68l-.13,20.86h26.94v-117.05h-26.94ZM759.25,234.76c-23.73,0-33.79-14.75-33.79-35.26h0c0-20.51,10.06-35.26,33.79-35.26,15.07,0,31.84,10.53,31.84,35.26s-16.77,35.26-31.84,35.26Z"/>
+        </g>
+      </g>
+      <text fill="#231f20" font-family="ObjektivMk2-Medium, 'Objektiv Mk2'" font-size="76.78" font-weight="500" transform="translate(501.27 362.91)"><tspan x="0" y="0">PUBLISHING GROUP</tspan></text>
+      <polygon fill="#231f20" points="267.36 102.75 206.18 243.38 195.82 243.41 134.59 102.75 89.41 102.75 89.41 320.76 127.13 320.76 127.13 171.25 172.81 279.84 226.4 279.84 273.21 171.22 273.21 320.76 310.94 320.76 310.94 102.75 267.36 102.75"/>
+      <circle fill="#fff" cx="354.41" cy="297.15" r="23.61"/>
+    </svg>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>MPG Design Growth Matrix</h1>
+    <p class="subtitle">Building exceptional designers through clarity, craft, and career growth</p>
+    <button class="pill" onclick="document.querySelector('.content-section').scrollIntoView({behavior:'smooth'})">Explore All Levels</button>
+  </div>
+</div>
+
+<div class="content-section">
+  <div class="wrap">
+    <h2 class="section-title">Career Progression Framework</h2>
+    <p class="section-desc">Click any level to explore detailed expectations, skills, and growth signals for each stage of your design career at MPG.</p>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 1</div>
+          <h2 class="level-name">Junior Graphic Designer</h2>
+          <p class="level-summary">Supports projects through production and basic design tasks</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Supports projects through production and basic design tasks; learns process and tools.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Foundational understanding of design principles; developing Adobe CC, Figma, After Effects fluency.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Works closely with Seniors; open to feedback; eager to learn.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Understands MPG's creative purpose and audience basics.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Completes assigned tasks accurately and on time, with attention to detail.</li>
+              <li>Demonstrates curiosity about MPG's creative tools and systems.</li>
+              <li>Building foundational skills in Adobe Photoshop, Illustrator, and InDesign; beginning exposure to Figma and After Effects.</li>
+              <li>Seeks feedback actively and applies it quickly.</li>
+              <li>Shows steady growth in technical fluency and creative confidence.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 2</div>
+          <h2 class="level-name">Graphic Designer</h2>
+          <p class="level-summary">Executes assigned projects independently with guidance</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Executes assigned projects independently with guidance; manages workload effectively.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Solid foundation in design, motion, and digital principles; handles full promo campaign assets; Advanced knowledge of PSD, AI, INDD; Developing knowledge of Figma/XD, AE.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Collaborates cross-functionally; receptive to feedback; reliable team player.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Applies creative solutions to drive marketing performance.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Produces high-quality creative independently with minimal oversight.</li>
+              <li>Demonstrates advanced use of Photoshop, Illustrator, and InDesign; growing fluency in Figma/XD and After Effects.</li>
+              <li>Balances multiple campaign deliverables efficiently while meeting deadlines.</li>
+              <li>Begins proposing creative alternatives and design optimizations.</li>
+              <li>Collaborates effectively with copywriters, marketers, and developers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 3</div>
+          <h2 class="level-name">Senior Graphic Designer</h2>
+          <p class="level-summary">Owns end-to-end design projects and mentors peers</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Owns end-to-end design projects; contributes to creative concepts; mentors peers informally.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Advanced skill in at least one discipline (print, motion, code, or digital). Advanced knowledge of Adobe CS, XD/Figma, AE, HTML, CSS.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Mentors designers; collaborates with marketing and CD.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Contributes to creative problem-solving and process improvement.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Leads projects end-to-end with minimal direction.</li>
+              <li>Demonstrates advanced cross-tool expertise across Adobe Creative Suite, Figma/XD, After Effects, and HTML/CSS.</li>
+              <li>Coaches other designers on best practices, workflow efficiency, and creative standards.</li>
+              <li>Pushes creative boundaries while maintaining brand alignment.</li>
+              <li>Recognized as a trusted partner who elevates team craft and output quality.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 4</div>
+          <h2 class="level-name">Principal Designer</h2>
+          <p class="level-summary">Creative authority driving innovation and quality</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Creative authority in multiple domains; leads visual quality and innovation.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Expert-level craft across mediums and all design software; drives experimentation and innovation.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Coaches seniors and designers; partners with Head of Design and CD.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Shapes MPG's visual standards and elevates creative direction.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Expert-level proficiency across design, motion, and interactive tools; leverages them to experiment and innovate.</li>
+              <li>Mentors senior and mid-level designers, improving team craft and confidence.</li>
+              <li>Defines creative benchmarks for MPG Design output and quality.</li>
+              <li>Improves tools, processes, and team workflows for higher efficiency.</li>
+              <li>Shapes MPG's visual standards and inspires creative excellence.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 5</div>
+          <h2 class="level-name">Head of Design</h2>
+          <p class="level-summary">Leads MPG Design team operations and creative excellence</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Leads MPG Design team operations and creative excellence.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Broad design knowledge; understands systems, process, and team operations.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Leads culture and mentorship; aligns creative with marketing and brand strategy.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Defines design strategy and direction for MPG Design.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Develops and articulates a clear design vision aligned with business goals.</li>
+              <li>Grows and mentors a high-performing team of designers and creative specialists.</li>
+              <li>Improves operational systems, efficiency, and creative quality across the org.</li>
+              <li>Represents MPG Design in cross-departmental discussions and planning.</li>
+              <li>Creates an inclusive, inspiring, and high-standard creative culture.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card" onclick="toggleLevel(this)">
+      <div class="level-header">
+        <div class="level-title-group">
+          <div class="level-number">Level 6</div>
+          <h2 class="level-name">Creative Director</h2>
+          <p class="level-summary">Oversees holistic creative vision across MPG brands</p>
+        </div>
+        <div class="expand-icon">+</div>
+      </div>
+      <div class="level-details">
+        <div class="details-content">
+          <div class="detail-section">
+            <h3>Scope of Work</h3>
+            <p>Oversees holistic creative vision across MPG brands; connects brand, marketing, and storytelling.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Creative & Technical Skills</h3>
+            <p>Creative visionary with expert cross-media understanding.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Collaboration & Leadership</h3>
+            <p>Provides leadership across Design, Studio, and MarTech.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Strategy & Impact</h3>
+            <p>Shapes company-wide creative strategy and visual identity.</p>
+          </div>
+          <div class="detail-section">
+            <h3>Growth Signals</h3>
+            <ul>
+              <li>Defines and communicates MPG's creative vision across brands and platforms.</li>
+              <li>Mentors and empowers design and creative leaders.</li>
+              <li>Sets and maintains creative excellence across all visual and brand touchpoints.</li>
+              <li>Shapes creative strategy in collaboration with senior marketing and business leadership.</li>
+              <li>Champions design as a strategic driver of growth, storytelling, and brand value.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-content">
+    <p>MPG Design – Professional Growth Framework for Creative Excellence</p>
+  </div>
+</div>
+
+<script>
+function toggleLevel(card) {
+  card.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
